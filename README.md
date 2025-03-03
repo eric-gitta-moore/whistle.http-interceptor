@@ -7,7 +7,7 @@ A whistle plugin for modifying HTTP requests and responses.
 ## Installation
 
 ```bash
-npm install -g whistle.http-interceptor
+npm install -g github:eric-gitta-moore/whistle.http-interceptor
 ```
 
 ## Features

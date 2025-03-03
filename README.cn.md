@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm install -g whistle.http-interceptor
+npm install -g github:eric-gitta-moore/whistle.http-interceptor
 ```
 
 ## 功能特性
