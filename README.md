@@ -1,78 +1,74 @@
-## 默认规则
+# whistle.http-interceptor
 
-```js
-* http-handle://
-```
-默认规则路径 js 文件为项目下的当前用户文件home文件夹下的 whistle.handle.rules/index.js,例如：
-`windows:C:\Users\Administrator\whistle.http-handle.rules`
-`android:/sdcard/whistle.http-handle.rules/index.js`
+[English](README.md) | [中文](README.cn.md)
 
-## 配置 whistle 规则 rules
+A whistle plugin for modifying HTTP requests and responses.
 
-匹配的域名 http-handle://自定义规则路径
+## Installation
 
-```js
-wwww.baidu.com http-handle://E:\code\my\whistle.http-handle\index.js
+```bash
+npm install -g whistle.http-interceptor
 ```
 
-## 流程图
+## Features
 
-![流程图片](flow.png)
+- Intercept and modify HTTP requests and responses
+- Support for matching URLs using wildcards
+- Flexible configuration through JavaScript
+- Support various HTTP body types (JSON, form, text, multipart, stream)
 
-## 规则
+## Configuration
 
-- reqConfig 真正请求时的数据配置
-  - url 请求的 url
-  - method 请求的方法
-  - headers 头信息
-  - query 查询字符串对象
-  - bodyType body 的类型 formData|form|json|text
-  - body 数据 string|object
+### Rules Configuration
 
-- reqConfig 返回客户端时的数据配置
-  - statusCode 状态码
-  - headers 头信息
-  - body 数据 string|object|buffer object 时自动转为 json 字符串
+Add the following rule in whistle:
 
-- next 传递给下一个请求的配置 传递false时为阻止请求或者响应
-  - reqConfig
-  - reqConfig
+```
+^/api/path/to/match* http-interceptor://{test.js}
+```
 
+### Values Configuration
 
-## 修改响应图片示例
+Create a test.js file with the following content:
+
 ```js
-const fs = require("fs");
-const util = require("util");
-const readFileAsync = util.promisify(fs.readFile);
-
 module.exports = [
   {
-    // 匹配的 url  **为多个通配字符，*为单个统配字符
-    // 例如：https://www.baidu.com/action/**
-    url: "**", //匹配所有请求url
-    // 匹配的 method *表示所有
-    method: "get",
-    // 发送真正请求前 调用next()修改数据
-    beforeSendRequest(reqConfig, next) {
-      next(reqConfig);
-    },
-    // 返回响应给客户端前 调用next()修改数据
+    url: "**", // Match all request URLs
+    method: "*", // Match all HTTP methods
+    // Modify response before sending to client
     beforeSendResponse(reqConfig, resConfig, next) {
-      //判断响应的的类型是否是图片
-      if (resConfig.headers["content-type"].includes("image")) {
-        console.log("拦截图片响应...");
-        // 读取本地文件
-        const imagePath = "/storage/emulated/0/Pictures/cropedIMG_20230719_160944.jpg.png";
-        readFileAsync(imagePath)
-          .then(imageData => (resConfig.body = imageData)) // 将图片数据替换
-          .catch(error => console.error(error))
-          .finally(() => {
-            next(resConfig); // 把响应给客户端
-          });
-      } else {
-        next(resConfig); // 不是图片则不修改直接返回
-      }
+      // Modify response data here
+      let root = resConfig.body;
+      // Your modification logic
+      next(resConfig);
+    },
+    // Modify request before sending to server (optional)
+    beforeSendRequest(reqConfig, next) {
+      // Modify request data here
+      next(reqConfig);
     }
   }
+];
+```
+
+## Example
+
+Here's an example that modifies the response data:
+
+```js
+module.exports = [
+  {
+    url: "**",
+    method: "*",
+    beforeSendResponse(reqConfig, resConfig, next) {
+      let root = resConfig.body;
+      try {
+        root.data.userWorks[0].renderStatus = 2;
+        root.data.userWorks[0].failureType = 3;
+      } catch (error) {}
+      next(resConfig);
+    },
+  },
 ];
 ```

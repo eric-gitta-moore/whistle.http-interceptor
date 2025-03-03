@@ -1,10 +1,7 @@
 require("./utils/fixAndroid.js");
 const Koa = require("koa");
-const path = require("path");
 const bodyParser = require("http-body-parser").koa;
 const middleware = require("./middleware/middleware");
-const fsa = require("fs-extra");
-const decache = require("decache");
 
 const app = new Koa();
 // 错误处理
