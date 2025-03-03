@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文](README.cn.md)
 
-A whistle plugin for modifying HTTP requests and responses.
+A whistle plug-in that uses JavaScript to dynamically modify HTTP requests and responses.
 
 ## Installation
 

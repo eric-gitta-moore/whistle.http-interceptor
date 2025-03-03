@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文](README.cn.md)
 
-一个用于修改 HTTP 请求和响应的 whistle 插件。
+一个使用 JavaScript 动态进行修改 HTTP 请求和响应的 whistle 插件。
 
 ## 安装
 
