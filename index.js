@@ -10,7 +10,7 @@ app.use(async (ctx, next) => {
     await next();
   } catch (err) {
     ctx.status = err.status || 500;
-    ctx.body = err.message;
+    ctx.body = err.stack || err.message;
   }
 });
 
@@ -40,53 +40,22 @@ const findRules = (rules, method, url) => {
     );
   });
 };
-const loadBaseRulesModule = () => {
-  try {
-    require(process.env.RULES_DIR);
-  } catch (error) {
-    console.log(`没有找到规则模块:${process.env.RULES_DIR}`);
-  }
-};
 
 const serverCallback = app.callback();
-loadBaseRulesModule();
 exports.server = (server) => {
   server.on("request", (req, res) => {
-    try {
-      const { method } = req;
-      const { url, ruleValue } = req.originalReq;
-      // decache(rulesPath);
-      const rules = eval(ruleValue);
-      // console.log(rules);
-      if (!Array.isArray(rules)) {
-        throw Error(`${rulesPath} 规则应该是一个数组`);
-      }
-      const rule = findRules(rules, method, url);
-      if (rule) {
-        app.context.rule = rule;
-        serverCallback(req, res);
-      } else {
-        req.passThrough();
-      }
-    } catch (error) {
-      // throw error;
-      const errStr = error.stack || error.toString()
-      console.log(errStr);
-      res.setHeader("Content-Type", "text/plain; charset=utf-8");
-      res.end(errStr);
+    const { method } = req;
+    const { url, ruleValue } = req.originalReq;
+    // decache(rulesPath);
+    const rules = eval(ruleValue);
+    // console.log(rules);
+    if (!Array.isArray(rules)) throw Error(`${rulesPath} 规则应该是一个数组`);
+    const rule = findRules(rules, method, url);
+    if (rule) {
+      app.context.rule = rule;
+      serverCallback(req, res);
+    } else {
+      req.passThrough();
     }
   });
-
-  // handle websocket request
-  server.on("upgrade", (req /*, socket*/) => {
-    // 修改 websocket 请求用，
-    req.passThrough(); // 直接透传
-  });
-
-  // handle tunnel request
-  server.on("connect", (req /*, socket*/) => {
-    // 修改普通 tcp 请求用
-    req.passThrough(); // 直接透传
-  });
-
 };
