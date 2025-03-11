@@ -75,7 +75,7 @@ module.exports = [
 
 e.g.
 
-````
+````js
 ^/api/common/tcc* http-interceptor://{t.js}
 
 ```t.js
