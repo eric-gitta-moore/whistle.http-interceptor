@@ -114,13 +114,7 @@ module.exports = [
   {
     url: "**",
     method: "*",
-    beforeSendResponse(reqConfig, resConfig, next) {
-      try {
-        beforeSendResponse(reqConfig, resConfig, next);
-      } catch (error) {
-        console.error(error);
-      }
-    },
+    beforeSendResponse,
   },
 ];
 ```
