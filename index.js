@@ -70,7 +70,7 @@ exports.server = (server) => {
       }
     } catch (error) {
       // throw error;
-      cosnt errStr = error.stack || error.toString()
+      const errStr = error.stack || error.toString()
       console.log(errStr);
       res.setHeader("Content-Type", "text/plain; charset=utf-8");
       res.end(errStr);
