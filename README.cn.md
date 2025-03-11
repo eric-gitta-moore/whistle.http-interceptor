@@ -102,18 +102,26 @@ e.g. Rules Default 2
 
 ```t.js
 function beforeSendResponse(reqConfig, resConfig, next) {
-    let root = resConfig.body;
-    root.data.showResultAuditInfo = true
-    root.data.showMaterialAuditInfo = true
-    next(resConfig);
+  let root = resConfig.body;
+  if ("showResultAuditInfo" in root.data) {
+    root.data.showResultAuditInfo = true;
+    root.data.showMaterialAuditInfo = true;
+  }
+  next(resConfig);
 }
 
 module.exports = [
-    {
-        url: "**",
-        method: "*",
-        beforeSendResponse,
+  {
+    url: "**",
+    method: "*",
+    beforeSendResponse(reqConfig, resConfig, next) {
+      try {
+        beforeSendResponse(reqConfig, resConfig, next);
+      } catch (error) {
+        console.error(error);
+      }
     },
+  },
 ];
 ```
 ````
