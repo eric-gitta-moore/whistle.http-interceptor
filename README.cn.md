@@ -86,10 +86,8 @@ module.exports = [
     // 返回响应给客户端前 调用next()修改数据
     beforeSendResponse(reqConfig, resConfig, next) {
       let root = resConfig.body;
-      try {
-        root.data.showResultAuditInfo = true
-        root.data.showMaterialAuditInfo = true
-      } catch (error) {}
+      root.data.showResultAuditInfo = true
+      root.data.showMaterialAuditInfo = true
       next(resConfig);
     },
   },
