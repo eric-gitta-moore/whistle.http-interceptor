@@ -73,7 +73,7 @@ module.exports = [
 ];
 ```
 
-e.g.
+e.g. 1
 
 ````js
 ^/api/common/tcc* http-interceptor://{t.js}
@@ -91,6 +91,29 @@ module.exports = [
       next(resConfig);
     },
   },
+];
+```
+````
+
+e.g. 2
+
+````js
+^/api/common/tcc* http-interceptor://{t.js}
+
+```t.js
+function beforeSendResponse(reqConfig, resConfig, next) {
+    let root = resConfig.body;
+    root.data.showResultAuditInfo = true
+    root.data.showMaterialAuditInfo = true
+    next(resConfig);
+}
+
+module.exports = [
+    {
+        url: "**",
+        method: "*",
+        beforeSendResponse,
+    },
 ];
 ```
 ````
