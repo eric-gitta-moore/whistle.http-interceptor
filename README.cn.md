@@ -73,7 +73,7 @@ module.exports = [
 ];
 ```
 
-e.g. 1
+e.g. Rules Default 1
 
 ````js
 ^/api/common/tcc* http-interceptor://{t.js}
@@ -95,7 +95,7 @@ module.exports = [
 ```
 ````
 
-e.g. 2
+e.g. Rules Default 2
 
 ````js
 ^/api/common/tcc* http-interceptor://{t.js}
