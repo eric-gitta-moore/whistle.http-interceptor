@@ -70,9 +70,10 @@ exports.server = (server) => {
       }
     } catch (error) {
       // throw error;
-      console.log(error.toString());
+      cosnt errStr = error.stack || error.toString()
+      console.log(errStr);
       res.setHeader("Content-Type", "text/plain; charset=utf-8");
-      res.end(error.toString());
+      res.end(errStr);
     }
   });
 
@@ -88,7 +89,4 @@ exports.server = (server) => {
     req.passThrough(); // 直接透传
   });
 
-  // server.on("error", err => {
-  //   console.log(err);
-  // });
 };
