@@ -72,3 +72,25 @@ module.exports = [
   },
 ];
 ```
+
+e.g.
+
+````js
+^/api/common/tcc* http-interceptor://{t.js}
+
+```t.js
+module.exports = [
+  {
+    url: "**", //匹配所有请求url
+    method: "*",
+    // 返回响应给客户端前 调用next()修改数据
+    beforeSendResponse(reqConfig, resConfig, next) {
+      let root = resConfig.body;
+      root.data.showResultAuditInfo = true
+      root.data.showMaterialAuditInfo = true
+      next(resConfig);
+    },
+  },
+];
+```
+````
